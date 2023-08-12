@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const router = require('express').Router();
+const authMiddleware = require('../middlewares/auth');
 const {successResponse, errorResponse} = require('../utils/functions');
 
 router.post('/register', async (req, res)=>{
@@ -70,5 +71,15 @@ router.get('/user', async (req, res)=>{
         return res.status(401).json(errorResponse('Invalid Token'));
     }
 });
+router.put('/update', authMiddleware,async(req,res)=>{
+    let {name} = req.body.token
+    if(!name) return res.status(400).json(errorResponse("Email and name fields are required"))
+    const data = await User.updateOne(
+        {_id: req.user_id},
+        {$set:{name: name}}
+    )
+    return res.json(successResponse('Name Changed Successfully'))
+
+})
 
 module.exports = router;
