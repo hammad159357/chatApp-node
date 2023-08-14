@@ -9,7 +9,7 @@ router.get('/contacts',async (req, res)=>{
 
         let contacts = await User.find({
             _id: {$ne: req.user_id}
-        }).select('_id name');
+        }).select('_id name profileImage');
         let userMessages = await Message.find({
             $or: [ {sender: req.user_id}, {receiver: req.user_id} ]
         }).select('_id text sender receiver createdAt').sort({'_id': -1}).exec()

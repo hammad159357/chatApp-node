@@ -17,6 +17,7 @@ const server = http.createServer(app);
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+app.use(express.static('public'));
 app.use(helmet());
 app.use(cors({
     origin:'http://localhost:4000',
